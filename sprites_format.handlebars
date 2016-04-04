@@ -3,9 +3,9 @@
 {{#content "sprites-comment"}}{{/content}}{{#content "sprites"}}{{/content}}
 {{#content "spritesheet"}}
 ${{spritesheet_info.strings.name}}: (
-	{{spritesheet_info.strings.name}}: ({{spritesheet.px.width}}, {{spritesheet.px.height}}, '{{{spritesheet.escaped_image}}}'),
+	{{spritesheet_info.strings.name}}: (width:{{spritesheet.px.width}}, height:{{spritesheet.px.height}}, url:'{{{spritesheet.escaped_image}}}'),
 	{{#each sprites}}
-	{{strings.name}}: ({{px.offset_x}}, {{px.offset_y}}, {{px.width}}, {{px.height}}),
+	{{strings.name}}: (background-position-x:{{px.offset_x}}, background-position-y:{{px.offset_y}}, width:{{px.width}}, height:{{px.height}}),
 	{{/each}}
 );
 {{/content}}

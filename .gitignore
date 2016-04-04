@@ -1,0 +1,6 @@
+*.db
+/dist
+node_modules
+src/scss/_sprites
+src/img/sp.png
+src/img/sp*.png

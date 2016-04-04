@@ -1,0 +1,58 @@
+@charset "utf-8";
+
+@function str-replace($string, $search, $replace: '') {
+	$index: str-index($string, $search);
+	@if $index {
+		@return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+	}
+	@return $string;
+}
+
+@function get-sprite-width($sprite, $retina:false, $offsetX:0) {
+	$sprite-width : nth($sprite, 5);
+	@if $retina == true{
+		$sprite-width: ($sprite-width / 2) + $offsetX;
+	}@else{
+		$sprite-width: $sprite-width + $offsetX;
+	}
+	@return $sprite-width;
+}
+
+@function get-sprite-height($sprite, $retina:false) {
+	$sprite-height : nth($sprite, 6);
+	@if $retina == true{
+		@return $sprite-height / 2;
+	}@else{
+		@return $sprite-height;
+	}
+}
+
+@function get-sprite-positionX($sprite, $retina:false, $offsetX:0) {
+	$sprite-position-X: nth($sprite, 3);
+	@if $retina == true{
+		$sprite-position-X: $sprite-position-X / 2;
+	}
+	@return $sprite-position-X + $offsetX;
+}
+
+@function get-sprite-positionY($sprite, $retina:false, $offsetY:0) {
+	$sprite-position-Y: nth($sprite, 4);
+	@if $retina == true{
+		$sprite-position-Y: $sprite-position-Y / 2;
+	}
+	@return $sprite-position-Y + $offsetY;
+}
+
+@function get-sprite-position($sprite, $retina:false){
+	@return get-sprite-positionX($sprite, $retina) get-sprite-positionY($sprite, $retina);
+}
+
+@function get-sprite-position($sprite, $retina:false) {
+	$sprite-position-X: get-sprite-positionX($sprite);
+	$sprite-position-Y: get-sprite-positionY($sprite);
+	@if $retina == true{
+		$sprite-position-X: $sprite-position-X / 2;
+		$sprite-position-Y: $sprite-position-Y / 2;
+	}
+	@return $sprite-position-X $sprite-position-Y;
+}

@@ -1,0 +1,14 @@
+{
+  "name": "spritesmith_mixin_with_gulp",
+  "version": "0.1.0",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {},
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-sass": "^2.2.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp.spritesmith": "^6.2.0"
+  }
+}

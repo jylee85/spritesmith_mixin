@@ -1,15 +1,12 @@
 @charset "utf-8";
 {{#extend "scss"}}
-{{#content "sprites-comment"}}
-{{/content}}
-{{#content "sprites"}}
-{{#each sprites}}
-${{strings.name}}: ({{px.x}}, {{px.y}}, {{px.offset_x}}, {{px.offset_y}}, {{px.width}}, {{px.height}}, {{px.total_width}}, {{px.total_height}}, '{{{escaped_image}}}', '{{name}}');
-{{/each}}
-{{/content}}
-
+{{#content "sprites-comment"}}{{/content}}{{#content "sprites"}}{{/content}}
 {{#content "spritesheet"}}
-${{spritesheet_info.strings.name_sprites}}: ({{#each sprites}}${{strings.name}}, {{/each}});
-${{spritesheet_info.strings.name}}: ({{spritesheet.px.width}}, {{spritesheet.px.height}}, '{{{spritesheet.escaped_image}}}', {{spritesheet_info.strings.name}});
+${{spritesheet_info.strings.name}}: (
+	{{spritesheet_info.strings.name}}: ({{spritesheet.px.width}}, {{spritesheet.px.height}}, '{{{spritesheet.escaped_image}}}'),
+	{{#each sprites}}
+	{{strings.name}}: ({{px.offset_x}}, {{px.offset_y}}, {{px.width}}, {{px.height}}),
+	{{/each}}
+);
 {{/content}}
 {{/extend}}

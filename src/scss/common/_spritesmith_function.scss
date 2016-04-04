@@ -8,51 +8,52 @@
 	@return $string;
 }
 
-@function get-sprite-width($sprite, $retina:false, $offsetX:0) {
-	$sprite-width : nth($sprite, 5);
-	@if $retina == true{
-		$sprite-width: ($sprite-width / 2) + $offsetX;
-	}@else{
-		$sprite-width: $sprite-width + $offsetX;
-	}
-	@return $sprite-width;
+@function get-sprite-map($sprite, $spritesheet){
+	@return map_get($spritesheet, $sprite);
 }
 
-@function get-sprite-height($sprite, $retina:false) {
-	$sprite-height : nth($sprite, 6);
-	@if $retina == true{
-		@return $sprite-height / 2;
-	}@else{
-		@return $sprite-height;
-	}
+@function get-spritesheet-name($spritesheet){
+	@return nth( map-keys($spritesheet), 1);
 }
 
-@function get-sprite-positionX($sprite, $retina:false, $offsetX:0) {
-	$sprite-position-X: nth($sprite, 3);
-	@if $retina == true{
-		$sprite-position-X: $sprite-position-X / 2;
-	}
-	@return $sprite-position-X + $offsetX;
+@function get-spritesheet-map($spritesheet){
+	@return map-get($spritesheet, get-spritesheet-name($spritesheet));
 }
 
-@function get-sprite-positionY($sprite, $retina:false, $offsetY:0) {
-	$sprite-position-Y: nth($sprite, 4);
-	@if $retina == true{
-		$sprite-position-Y: $sprite-position-Y / 2;
-	}
-	@return $sprite-position-Y + $offsetY;
+@function get-spritesheet-width($spritesheet){
+	@return nth(get-spritesheet-map($spritesheet), 1);
 }
 
-@function get-sprite-position($sprite, $retina:false){
-	@return get-sprite-positionX($sprite, $retina) get-sprite-positionY($sprite, $retina);
+@function get-spritesheet-height($spritesheet){
+	@return nth(get-spritesheet-map($spritesheet), 2);
 }
 
-@function get-sprite-position($sprite, $retina:false) {
-	$sprite-position-X: get-sprite-positionX($sprite);
-	$sprite-position-Y: get-sprite-positionY($sprite);
-	@if $retina == true{
-		$sprite-position-X: $sprite-position-X / 2;
-		$sprite-position-Y: $sprite-position-Y / 2;
-	}
-	@return $sprite-position-X $sprite-position-Y;
+@function get-spritesheet-url($spritesheet){
+	@return nth(get-spritesheet-map($spritesheet), 3);
+}
+
+@function get-sprite-width($sprite, $spritesheet, $retina:true, $offsetX:0) {
+	$sp-width: nth(get-sprite-map($sprite, $spritesheet), 3);
+	@return if($retina, $sp-width/2, $sp-width) + $offsetX;
+}
+
+@function get-sprite-height($sprite, $spritesheet, $retina:true, $offsetY:0) {
+	$sp-height: nth(get-sprite-map($sprite, $spritesheet), 4);
+	@return if($retina, $sp-height/2, $sp-height) + $offsetY;
+}
+
+@function get-sprite-positionX($sprite, $spritesheet, $retina:true, $offsetX:0) {
+	$sp-position-X: nth(get-sprite-map($sprite, $spritesheet), 1);
+	@return if($retina, $sp-position-X/2, $sp-position-X) + $offsetX;
+}
+
+@function get-sprite-positionY($sprite, $spritesheet, $retina:true, $offsetY:0) {
+	$sp-position-Y: nth(get-sprite-map($sprite, $spritesheet), 2);
+	@return if($retina, $sp-position-Y/2, $sp-position-Y) + $offsetY;
+}
+
+@function get-sprite-position($sprite, $spritesheet, $retina:true) {
+	$sprite-position-X: get-sprite-positionX($sprite, $spritesheet, $retina);
+	$sprite-position-Y: get-sprite-positionY($sprite, $spritesheet, $retina);
+	@return ($sprite-position-X) ($sprite-position-Y);
 }

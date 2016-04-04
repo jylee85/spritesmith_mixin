@@ -4,64 +4,53 @@
 
 // 중복되는 아이콘명이 있을때 충돌나지 않게 spritesheet와 sprite를 연결해주고,
 // 사용된 선택자만 속성을 추가해주는 mixin
-@mixin sprite-init($spritesheets, $retina:false){
-	$background-name: nth($spritesheets, 4);
-	$background-size-width: nth($spritesheets, 1);
-	$background-size-height: nth($spritesheets, 2);
-	$background-image-url: nth($spritesheets, 3);
-	$background-image-url-pc: str-replace(nth($spritesheets, 3),'.png','_pc.png');
-
-	%#{$background-name}{
-		background-image: url($background-image-url);
-		background-repeat: no-repeat;
-		@if $retina == true{
-			background-image: url($background-image-url-pc) \9;
-			-webkit-background-size: ($background-size-width / 2) ($background-size-height / 2);
-			background-size: ($background-size-width / 2) ($background-size-height / 2);
+@mixin sprite-init($spritesheet, $retina:true){
+	$sp-spritesheet-name: get-spritesheet-name($spritesheet);
+	%#{$sp-spritesheet-name}{
+		@include get-spritesheet-url($spritesheet, $retina, $repeat-option:no-repeat);
+		@if $retina {
+			@include get-spritesheet-size($spritesheet, $retina);
 		}
 	}
 }
 
-//실제 사용하는 sprite mixin
-@mixin set-sprite($sprite, $spritesheets, $retina:false, $display:inline-block, $mediaquery:false) {
-	//extend는 media query 내부에서 사용되면 컴파일 오류를 발생시키기 때문에
-	//mediaquery 내부에서 sprite를 사용하는경우 $mediaquery를 true로 변경
-	$spritesheets-name: nth($spritesheets, 4);
+// sprite 자동화를 위한 기본적인 mixin
+@mixin get-sprite($sprite, $spritesheet, $retina:true, $display:inline-block) {
+	// extend는 mediaquery 내부에서 사용되면 컴파일 오류를 발생시키기 때문에 미디어 쿼리 내부에서는 get-sprite가 아닌
+	// mediaquery바깥에서 선언하거나 개별 함수를 사용하여 값을 적용해야 함
+	$sp-spritesheet-name: get-spritesheet-name($spritesheet);
 
-	@if $mediaquery == false{
-		@extend %#{$spritesheets-name};
-	}
+	@extend %#{$sp-spritesheet-name};
+
 	@if $display != null{
 		display: $display;
 	}
-	width: get-sprite-width($sprite, $retina);
-	height: get-sprite-height($sprite, $retina);
-	background-position: get-sprite-position($sprite, $retina);
+	width: get-sprite-width($sprite, $spritesheet, $retina);
+	height: get-sprite-height($sprite, $spritesheet, $retina);
+	background-position: get-sprite-position($sprite, $spritesheet, $retina);
 }
 
-@mixin set-spritesheets-size($sprite, $retina:false) {
-	$sprite-background-width: nth($sprite, 7);
-	$sprite-background-height: nth($sprite, 8);
-	@if $retina == true {
-		-webkit-background-size: ($sprite-background-width / 2) ($sprite-background-height / 2);
-		background-size: ($sprite-background-width / 2) ($sprite-background-height / 2);
-	}@else{
-		-webkit-background-size: ($sprite-background-width) ($sprite-background-height);
-		background-size: ($sprite-background-width) ($sprite-background-height);
-	}
-}
-
-@mixin set-sprite-image($spritesheets, $retina:false, $repeat-option:false) {
-	$background-image-url: nth($spritesheets, 3);
-	$background-image-url-pc : str-replace($background-image-url, '.png', '_pc.png');
-
+@mixin get-spritesheet-url($spritesheet, $retina:true, $repeat-option:false) {
+	$sp-spritesheet-url: get-spritesheet-url($spritesheet);
+	$sp-spritesheet-url-pc: str-replace(get-spritesheet-url($spritesheet),'.png','_pc.png');
+	background-image: url($sp-spritesheet-url);
 	@if $retina == true{
-		background-image: url($background-image-url);
-		background-image: url($background-image-url-pc) \9;
-	}@else{
-		background-image: url($background-image-url);
+		background-image: url($sp-spritesheet-url-pc) \9;
 	}
 	@if ($repeat-option){
 		background-repeat: $repeat-option;
+	}
+}
+
+@mixin get-spritesheet-size($spritesheet, $retina:true) {
+	$sp-spritesheet-width: get-spritesheet-width($spritesheet);
+	$sp-spritesheet-height: get-spritesheet-height($spritesheet);
+
+	@if $retina == true {
+		-webkit-background-size: ($sp-spritesheet-width / 2) ($sp-spritesheet-height / 2);
+		background-size: ($sp-spritesheet-width / 2) ($sp-spritesheet-height / 2);
+	}@else{
+		-webkit-background-size: ($sp-spritesheet-width) ($sp-spritesheet-height);
+		background-size: ($sp-spritesheet-width) ($sp-spritesheet-height);
 	}
 }
